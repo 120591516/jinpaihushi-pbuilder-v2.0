@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-11
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.oracle.mapper.UserViewsMapper">
+	
+	<sql id="field">
+		V.VIEW_NAME, V.TEXT_LENGTH, V.TEXT, V.TYPE_TEXT_LENGTH, V.TYPE_TEXT,
+		V.OID_TEXT_LENGTH, V.OID_TEXT, V.VIEW_TYPE_OWNER, V.VIEW_TYPE, V.SUPERVIEW_NAME
+		,TC.COMMENTS
+	</sql>
+	
+	<sql id="condition">
+		<if test="viewName!=null">
+			AND V.VIEW_NAME=#{viewName}
+		</if>
+		<if test="textLength!=null">
+			AND V.TEXT_LENGTH=#{textLength}
+		</if>
+		<if test="text!=null">
+			AND V.TEXT=#{text}
+		</if>
+		<if test="typeTextLength!=null">
+			AND V.TYPE_TEXT_LENGTH=#{typeTextLength}
+		</if>
+		<if test="typeText!=null">
+			AND V.TYPE_TEXT=#{typeText}
+		</if>
+		<if test="oidTextLength!=null">
+			AND V.OID_TEXT_LENGTH=#{oidTextLength}
+		</if>
+		<if test="oidText!=null">
+			AND V.OID_TEXT=#{oidText}
+		</if>
+		<if test="viewTypeOwner!=null">
+			AND V.VIEW_TYPE_OWNER=#{viewTypeOwner}
+		</if>
+		<if test="viewType!=null">
+			AND V.VIEW_TYPE=#{viewType}
+		</if>
+		<if test="superviewName!=null">
+			AND V.SUPERVIEW_NAME=#{superviewName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="userViews" type="com.afocus.pbuilder.oracle.model.UserViews">
+		<result property="viewName" column="VIEW_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="textLength" column="TEXT_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="text" column="TEXT" javaType="String" jdbcType="VARBINARY"></result>
+		<result property="typeTextLength" column="TYPE_TEXT_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="typeText" column="TYPE_TEXT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oidTextLength" column="OID_TEXT_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="oidText" column="OID_TEXT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="viewTypeOwner" column="VIEW_TYPE_OWNER" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="viewType" column="VIEW_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="superviewName" column="SUPERVIEW_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="comments" column="COMMENTS" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM USER_VIEWS V
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="userViews">
+		SELECT <include refid="field"/>
+		FROM USER_VIEWS V
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = V.VIEW_NAME 
+		  AND TC.TABLE_TYPE = 'VIEW'
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadByName" resultMap="userViews">
+		SELECT <include refid="field"/>
+		FROM USER_VIEWS V
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = V.VIEW_NAME 
+		  AND TC.TABLE_TYPE = 'VIEW'
+		WHERE V.VIEW_NAME = #{viewName}
+	</select>
+	
+	<select id="listByNames" resultMap="userViews">
+		SELECT <include refid="field"/>
+		FROM USER_VIEWS V
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = V.VIEW_NAME 
+		  AND TC.TABLE_TYPE = 'VIEW'
+		WHERE
+		<foreach collection="viewNameLikes" index="index" item="viewNameLike" open="(" separator="OR" close=")">  
+			V.VIEW_NAME LIKE #{viewNameLike}
+	    </foreach> 
+	</select>
+	
+</mapper>

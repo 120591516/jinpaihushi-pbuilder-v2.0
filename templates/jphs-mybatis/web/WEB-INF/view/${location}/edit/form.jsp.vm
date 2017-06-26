@@ -1,0 +1,63 @@
+<%@page contentType="text/html;charset=utf-8" language="java"%>
+<%@page isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib prefix="jphs" uri="http://www.jinpaihushi.com/jsp/core"%>
+<div>
+	<input type="hidden" id="id" name="id" value="$d{${bean.alias}.id}" />
+	<div style="margin: 10px 0px 10px 0px;" class="event_start_from">
+		<div class="title_defalt">$d{${bean.alias}.id == null?'${table.comment}添加':'${table.comment}编辑'}</div>
+		<table id="${bean.alias}Table" class="tableStyle">
+#foreach($field in $bean.filter($baseFields))
+#javascript($field)
+	var field = arg0;
+	var validates = [];
+	if(field.original.isNullable=="NO"){
+		validates.push("required");
+	}
+	if(field.type == "Integer" || field.type == "Byte" || field.type == "Long" || field.type == "Short"){
+		validates.push("custom[integer]");
+	}else if(field.type == "Double" || field.type == "Float"){
+		validates.push("custom[number]");
+	}else if(field.type == "String"){
+		if(field.original.characterMaximumLength){
+			validates.push("maxSize[" + field.original.characterMaximumLength + "]");
+		}
+	}
+	context.put("validates", validates.join(","));
+#end
+			<tr>
+				<td align="right"#if($velocityCount==1)width="100"#end>${field.comment}：#if(${field.original.isNullable}=="NO")<label style="color: red;">*</label>#end</td>
+				<td>
+#if(${field.type}=="Date")
+					<input value="<fmt:formatDate value="${d}{${bean.alias}.${field.name}}" type="both" pattern="yyyy-MM-dd" />"
+						id="${field.name}"
+						name="${field.name}"
+						type="date"
+						class="inputText"
+						readonly="readonly"
+						onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})"#if(${validates}!="")
+
+					 	data-validation-engine="validate[${validates}]"#end></input>
+#elseif(${field.original.dataType}=="text")
+					<textArea id="${field.name}"
+						name="${field.name}"
+						rows="12"#if(${validates}!="")
+
+					 	data-validation-engine="validate[${validates}]"#end>${d}{fn${s}escapeXml(${bean.alias}.${field.name})}</textArea>
+#else
+					<input value="${d}{${bean.alias}.${field.name}}" 
+						id="${field.name}"
+						name="${field.name}"
+						type="text"
+						class="inputText"#if(${validates}!="")
+
+					 	data-validation-engine="validate[${validates}]"#end></input>
+#end
+				</td>
+			</tr>
+#end
+		</table>
+	</div>
+</div>

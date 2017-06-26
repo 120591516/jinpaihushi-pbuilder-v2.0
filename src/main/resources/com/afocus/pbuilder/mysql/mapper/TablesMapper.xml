@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-07
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.mysql.mapper.TablesMapper">
+	
+	<sql id="field">
+		TABLES.TABLE_CATALOG, TABLES.TABLE_SCHEMA, TABLES.TABLE_NAME, TABLES.TABLE_TYPE, TABLES.ENGINE,
+		TABLES.VERSION, TABLES.ROW_FORMAT, TABLES.TABLE_ROWS, TABLES.AVG_ROW_LENGTH, TABLES.DATA_LENGTH,
+		TABLES.MAX_DATA_LENGTH, TABLES.INDEX_LENGTH, TABLES.DATA_FREE, TABLES.AUTO_INCREMENT, TABLES.CREATE_TIME,
+		TABLES.UPDATE_TIME, TABLES.CHECK_TIME, TABLES.TABLE_COLLATION, TABLES.CHECKSUM, TABLES.CREATE_OPTIONS,
+		TABLES.TABLE_COMMENT
+	</sql>
+	
+	<sql id="condition">
+		<if test="tableCatalog!=null">
+			AND TABLES.TABLE_CATALOG=#{tableCatalog}
+		</if>
+		<if test="tableSchema!=null">
+			AND TABLES.TABLE_SCHEMA=#{tableSchema}
+		</if>
+		<if test="tableName!=null">
+			AND TABLES.TABLE_NAME=#{tableName}
+		</if>
+		<if test="tableType!=null">
+			AND TABLES.TABLE_TYPE=#{tableType}
+		</if>
+		<if test="engine!=null">
+			AND TABLES.ENGINE=#{engine}
+		</if>
+		<if test="version!=null">
+			AND TABLES.VERSION=#{version}
+		</if>
+		<if test="rowFormat!=null">
+			AND TABLES.ROW_FORMAT=#{rowFormat}
+		</if>
+		<if test="tableRows!=null">
+			AND TABLES.TABLE_ROWS=#{tableRows}
+		</if>
+		<if test="avgRowLength!=null">
+			AND TABLES.AVG_ROW_LENGTH=#{avgRowLength}
+		</if>
+		<if test="dataLength!=null">
+			AND TABLES.DATA_LENGTH=#{dataLength}
+		</if>
+		<if test="maxDataLength!=null">
+			AND TABLES.MAX_DATA_LENGTH=#{maxDataLength}
+		</if>
+		<if test="indexLength!=null">
+			AND TABLES.INDEX_LENGTH=#{indexLength}
+		</if>
+		<if test="dataFree!=null">
+			AND TABLES.DATA_FREE=#{dataFree}
+		</if>
+		<if test="autoIncrement!=null">
+			AND TABLES.AUTO_INCREMENT=#{autoIncrement}
+		</if>
+		<if test="createTime!=null">
+			AND TABLES.CREATE_TIME=#{createTime}
+		</if>
+		<if test="updateTime!=null">
+			AND TABLES.UPDATE_TIME=#{updateTime}
+		</if>
+		<if test="checkTime!=null">
+			AND TABLES.CHECK_TIME=#{checkTime}
+		</if>
+		<if test="tableCollation!=null">
+			AND TABLES.TABLE_COLLATION=#{tableCollation}
+		</if>
+		<if test="checksum!=null">
+			AND TABLES.CHECKSUM=#{checksum}
+		</if>
+		<if test="createOptions!=null">
+			AND TABLES.CREATE_OPTIONS=#{createOptions}
+		</if>
+		<if test="tableComment!=null">
+			AND TABLES.TABLE_COMMENT=#{tableComment}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="tables" type="com.afocus.pbuilder.mysql.model.Tables">
+		<result property="tableCatalog" column="TABLE_CATALOG" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableSchema" column="TABLE_SCHEMA" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableName" column="TABLE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableType" column="TABLE_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="engine" column="ENGINE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="version" column="VERSION" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="rowFormat" column="ROW_FORMAT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableRows" column="TABLE_ROWS" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="avgRowLength" column="AVG_ROW_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="dataLength" column="DATA_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="maxDataLength" column="MAX_DATA_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="indexLength" column="INDEX_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="dataFree" column="DATA_FREE" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="autoIncrement" column="AUTO_INCREMENT" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="createTime" column="CREATE_TIME" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="updateTime" column="UPDATE_TIME" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="checkTime" column="CHECK_TIME" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="tableCollation" column="TABLE_COLLATION" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="checksum" column="CHECKSUM" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="createOptions" column="CREATE_OPTIONS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableComment" column="TABLE_COMMENT" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM INFORMATION_SCHEMA.TABLES TABLES
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="tables">
+		SELECT <include refid="field"/>
+		FROM TABLES INFORMATION_SCHEMA.TABLES
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadByName" resultMap="tables">
+		SELECT <include refid="field"/>
+		FROM INFORMATION_SCHEMA.TABLES TABLES
+		WHERE TABLES.TABLE_SCHEMA=#{tableSchema}
+			AND TABLES.TABLE_NAME=#{tableName}
+	</select>
+	
+	<select id="listByNames" resultMap="tables">
+		SELECT <include refid="field"/>
+		FROM INFORMATION_SCHEMA.TABLES TABLES
+		WHERE TABLES.TABLE_SCHEMA=#{tableSchema} AND
+		<foreach collection="tableNameLikes" index="index" item="tableNameLike" open="(" separator="OR" close=")">  
+			TABLES.TABLE_NAME LIKE #{tableNameLike}
+	    </foreach> 
+	</select>
+	
+</mapper>

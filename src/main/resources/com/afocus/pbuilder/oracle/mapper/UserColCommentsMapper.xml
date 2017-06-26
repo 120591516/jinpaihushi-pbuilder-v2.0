@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-11
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.oracle.mapper.UserColCommentsMapper">
+	
+	<sql id="field">
+		CC.TABLE_NAME, CC.COLUMN_NAME, CC.COMMENTS
+	</sql>
+	
+	<sql id="condition">
+		<if test="tableName!=null">
+			AND CC.TABLE_NAME=#{tableName}
+		</if>
+		<if test="columnName!=null">
+			AND CC.COLUMN_NAME=#{columnName}
+		</if>
+		<if test="comments!=null">
+			AND CC.COMMENTS=#{comments}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="userColComments" type="com.afocus.pbuilder.oracle.model.UserColComments">
+		<result property="tableName" column="TABLE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnName" column="COLUMN_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="comments" column="COMMENTS" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM USER_COL_COMMENTS CC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="userColComments">
+		SELECT <include refid="field"/>
+		FROM USER_COL_COMMENTS CC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+</mapper>

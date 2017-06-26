@@ -1,0 +1,29 @@
+package ${base}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.jinpaihushi.dao.BaseDao;
+import ${base}.dao.${bean.name}Dao;
+import ${base}.model.${bean.name};
+import ${base}.service.${bean.name}Service;
+import com.jinpaihushi.service.impl.BaseServiceImpl;
+
+/**
+ * 
+ * @author $!author
+ * @date #date
+ * @version $!version
+ */
+@Service("${bean.alias}Service")
+public class ${bean.name}ServiceImpl extends BaseServiceImpl<${bean.name}> implements ${bean.name}Service{
+
+	@Autowired
+	private ${bean.name}Dao ${bean.alias}Dao;
+	
+	@Override
+	protected BaseDao<${bean.name}> getDao(){
+		return ${bean.alias}Dao;
+	}
+
+}

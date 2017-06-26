@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-11
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.oracle.mapper.UserTabColsMapper">
+	
+	<sql id="field">
+		TC.TABLE_NAME, TC.COLUMN_NAME, TC.DATA_TYPE, TC.DATA_TYPE_MOD, TC.DATA_TYPE_OWNER,
+		TC.DATA_LENGTH, TC.DATA_PRECISION, TC.DATA_SCALE, TC.NULLABLE, TC.COLUMN_ID,
+		TC.DEFAULT_LENGTH, TC.DATA_DEFAULT, TC.NUM_DISTINCT, TC.LOW_VALUE, TC.HIGH_VALUE,
+		TC.DENSITY, TC.NUM_NULLS, TC.NUM_BUCKETS, TC.LAST_ANALYZED, TC.SAMPLE_SIZE,
+		TC.CHARACTER_SET_NAME, TC.CHAR_COL_DECL_LENGTH, TC.GLOBAL_STATS, TC.USER_STATS, TC.AVG_COL_LEN,
+		TC.CHAR_LENGTH, TC.CHAR_USED, TC.V80_FMT_IMAGE, TC.DATA_UPGRADED, TC.HIDDEN_COLUMN,
+		TC.VIRTUAL_COLUMN, TC.SEGMENT_COLUMN_ID, TC.INTERNAL_COLUMN_ID, TC.HISTOGRAM, TC.QUALIFIED_COL_NAME
+	</sql>
+	
+	<sql id="condition">
+		<if test="tableName!=null">
+			AND TC.TABLE_NAME=#{tableName}
+		</if>
+		<if test="columnName!=null">
+			AND TC.COLUMN_NAME=#{columnName}
+		</if>
+		<if test="dataType!=null">
+			AND TC.DATA_TYPE=#{dataType}
+		</if>
+		<if test="dataTypeMod!=null">
+			AND TC.DATA_TYPE_MOD=#{dataTypeMod}
+		</if>
+		<if test="dataTypeOwner!=null">
+			AND TC.DATA_TYPE_OWNER=#{dataTypeOwner}
+		</if>
+		<if test="dataLength!=null">
+			AND TC.DATA_LENGTH=#{dataLength}
+		</if>
+		<if test="dataPrecision!=null">
+			AND TC.DATA_PRECISION=#{dataPrecision}
+		</if>
+		<if test="dataScale!=null">
+			AND TC.DATA_SCALE=#{dataScale}
+		</if>
+		<if test="nullable!=null">
+			AND TC.NULLABLE=#{nullable}
+		</if>
+		<if test="columnId!=null">
+			AND TC.COLUMN_ID=#{columnId}
+		</if>
+		<if test="defaultLength!=null">
+			AND TC.DEFAULT_LENGTH=#{defaultLength}
+		</if>
+		<if test="dataDefault!=null">
+			AND TC.DATA_DEFAULT=#{dataDefault}
+		</if>
+		<if test="numDistinct!=null">
+			AND TC.NUM_DISTINCT=#{numDistinct}
+		</if>
+		<if test="lowValue!=null">
+			AND TC.LOW_VALUE=#{lowValue}
+		</if>
+		<if test="highValue!=null">
+			AND TC.HIGH_VALUE=#{highValue}
+		</if>
+		<if test="density!=null">
+			AND TC.DENSITY=#{density}
+		</if>
+		<if test="numNulls!=null">
+			AND TC.NUM_NULLS=#{numNulls}
+		</if>
+		<if test="numBuckets!=null">
+			AND TC.NUM_BUCKETS=#{numBuckets}
+		</if>
+		<if test="lastAnalyzed!=null">
+			AND TC.LAST_ANALYZED=#{lastAnalyzed}
+		</if>
+		<if test="sampleSize!=null">
+			AND TC.SAMPLE_SIZE=#{sampleSize}
+		</if>
+		<if test="characterSetName!=null">
+			AND TC.CHARACTER_SET_NAME=#{characterSetName}
+		</if>
+		<if test="charColDeclLength!=null">
+			AND TC.CHAR_COL_DECL_LENGTH=#{charColDeclLength}
+		</if>
+		<if test="globalStats!=null">
+			AND TC.GLOBAL_STATS=#{globalStats}
+		</if>
+		<if test="userStats!=null">
+			AND TC.USER_STATS=#{userStats}
+		</if>
+		<if test="avgColLen!=null">
+			AND TC.AVG_COL_LEN=#{avgColLen}
+		</if>
+		<if test="charLength!=null">
+			AND TC.CHAR_LENGTH=#{charLength}
+		</if>
+		<if test="charUsed!=null">
+			AND TC.CHAR_USED=#{charUsed}
+		</if>
+		<if test="v80FmtImage!=null">
+			AND TC.V80_FMT_IMAGE=#{v80FmtImage}
+		</if>
+		<if test="dataUpgraded!=null">
+			AND TC.DATA_UPGRADED=#{dataUpgraded}
+		</if>
+		<if test="hiddenColumn!=null">
+			AND TC.HIDDEN_COLUMN=#{hiddenColumn}
+		</if>
+		<if test="virtualColumn!=null">
+			AND TC.VIRTUAL_COLUMN=#{virtualColumn}
+		</if>
+		<if test="segmentColumnId!=null">
+			AND TC.SEGMENT_COLUMN_ID=#{segmentColumnId}
+		</if>
+		<if test="internalColumnId!=null">
+			AND TC.INTERNAL_COLUMN_ID=#{internalColumnId}
+		</if>
+		<if test="histogram!=null">
+			AND TC.HISTOGRAM=#{histogram}
+		</if>
+		<if test="qualifiedColName!=null">
+			AND TC.QUALIFIED_COL_NAME=#{qualifiedColName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="userTabCols" type="com.afocus.pbuilder.oracle.model.UserTabCols">
+		<result property="tableName" column="TABLE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnName" column="COLUMN_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataType" column="DATA_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataTypeMod" column="DATA_TYPE_MOD" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataTypeOwner" column="DATA_TYPE_OWNER" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataLength" column="DATA_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="dataPrecision" column="DATA_PRECISION" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="dataScale" column="DATA_SCALE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="nullable" column="NULLABLE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnId" column="COLUMN_ID" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="defaultLength" column="DEFAULT_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="dataDefault" column="DATA_DEFAULT" javaType="String" jdbcType="VARBINARY"></result>
+		<result property="numDistinct" column="NUM_DISTINCT" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="lowValue" column="LOW_VALUE" javaType="String" jdbcType="VARBINARY"></result>
+		<result property="highValue" column="HIGH_VALUE" javaType="String" jdbcType="VARBINARY"></result>
+		<result property="density" column="DENSITY" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="numNulls" column="NUM_NULLS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="numBuckets" column="NUM_BUCKETS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="lastAnalyzed" column="LAST_ANALYZED" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="sampleSize" column="SAMPLE_SIZE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="characterSetName" column="CHARACTER_SET_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="charColDeclLength" column="CHAR_COL_DECL_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="globalStats" column="GLOBAL_STATS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userStats" column="USER_STATS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="avgColLen" column="AVG_COL_LEN" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="charLength" column="CHAR_LENGTH" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="charUsed" column="CHAR_USED" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="v80FmtImage" column="V80_FMT_IMAGE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataUpgraded" column="DATA_UPGRADED" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="hiddenColumn" column="HIDDEN_COLUMN" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="virtualColumn" column="VIRTUAL_COLUMN" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="segmentColumnId" column="SEGMENT_COLUMN_ID" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="internalColumnId" column="INTERNAL_COLUMN_ID" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="histogram" column="HISTOGRAM" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="qualifiedColName" column="QUALIFIED_COL_NAME" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM USER_TAB_COLS TC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="userTabCols">
+		SELECT <include refid="field"/>
+		FROM USER_TAB_COLS TC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+</mapper>

@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-11
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.oracle.mapper.UserTablesMapper">
+	
+	<sql id="field">
+		T.TABLE_NAME, T.TABLESPACE_NAME, T.CLUSTER_NAME, T.IOT_NAME, T.STATUS,
+		T.PCT_FREE, T.PCT_USED, T.INI_TRANS, T.MAX_TRANS, T.INITIAL_EXTENT,
+		T.NEXT_EXTENT, T.MIN_EXTENTS, T.MAX_EXTENTS, T.PCT_INCREASE, T.FREELISTS,
+		T.FREELIST_GROUPS, T.LOGGING, T.BACKED_UP, T.NUM_ROWS, T.BLOCKS,
+		T.EMPTY_BLOCKS, T.AVG_SPACE, T.CHAIN_CNT, T.AVG_ROW_LEN, T.AVG_SPACE_FREELIST_BLOCKS,
+		T.NUM_FREELIST_BLOCKS, T.DEGREE, T.INSTANCES, T.CACHE, T.TABLE_LOCK,
+		T.SAMPLE_SIZE, T.LAST_ANALYZED, T.PARTITIONED, T.IOT_TYPE, T.TEMPORARY,
+		T.SECONDARY, T.NESTED, T.BUFFER_POOL, T.ROW_MOVEMENT, T.GLOBAL_STATS,
+		T.USER_STATS, T.DURATION, T.SKIP_CORRUPT, T.MONITORING, T.CLUSTER_OWNER,
+		T.DEPENDENCIES, T.COMPRESSION, T.DROPPED, TC.COMMENTS
+	</sql>
+	
+	<sql id="condition">
+		<if test="tableName!=null">
+			AND T.TABLE_NAME=#{tableName}
+		</if>
+		<if test="tablespaceName!=null">
+			AND T.TABLESPACE_NAME=#{tablespaceName}
+		</if>
+		<if test="clusterName!=null">
+			AND T.CLUSTER_NAME=#{clusterName}
+		</if>
+		<if test="iotName!=null">
+			AND T.IOT_NAME=#{iotName}
+		</if>
+		<if test="status!=null">
+			AND T.STATUS=#{status}
+		</if>
+		<if test="pctFree!=null">
+			AND T.PCT_FREE=#{pctFree}
+		</if>
+		<if test="pctUsed!=null">
+			AND T.PCT_USED=#{pctUsed}
+		</if>
+		<if test="iniTrans!=null">
+			AND T.INI_TRANS=#{iniTrans}
+		</if>
+		<if test="maxTrans!=null">
+			AND T.MAX_TRANS=#{maxTrans}
+		</if>
+		<if test="initialExtent!=null">
+			AND T.INITIAL_EXTENT=#{initialExtent}
+		</if>
+		<if test="nextExtent!=null">
+			AND T.NEXT_EXTENT=#{nextExtent}
+		</if>
+		<if test="minExtents!=null">
+			AND T.MIN_EXTENTS=#{minExtents}
+		</if>
+		<if test="maxExtents!=null">
+			AND T.MAX_EXTENTS=#{maxExtents}
+		</if>
+		<if test="pctIncrease!=null">
+			AND T.PCT_INCREASE=#{pctIncrease}
+		</if>
+		<if test="freelists!=null">
+			AND T.FREELISTS=#{freelists}
+		</if>
+		<if test="freelistGroups!=null">
+			AND T.FREELIST_GROUPS=#{freelistGroups}
+		</if>
+		<if test="logging!=null">
+			AND T.LOGGING=#{logging}
+		</if>
+		<if test="backedUp!=null">
+			AND T.BACKED_UP=#{backedUp}
+		</if>
+		<if test="numRows!=null">
+			AND T.NUM_ROWS=#{numRows}
+		</if>
+		<if test="blocks!=null">
+			AND T.BLOCKS=#{blocks}
+		</if>
+		<if test="emptyBlocks!=null">
+			AND T.EMPTY_BLOCKS=#{emptyBlocks}
+		</if>
+		<if test="avgSpace!=null">
+			AND T.AVG_SPACE=#{avgSpace}
+		</if>
+		<if test="chainCnt!=null">
+			AND T.CHAIN_CNT=#{chainCnt}
+		</if>
+		<if test="avgRowLen!=null">
+			AND T.AVG_ROW_LEN=#{avgRowLen}
+		</if>
+		<if test="avgSpaceFreelistBlocks!=null">
+			AND T.AVG_SPACE_FREELIST_BLOCKS=#{avgSpaceFreelistBlocks}
+		</if>
+		<if test="numFreelistBlocks!=null">
+			AND T.NUM_FREELIST_BLOCKS=#{numFreelistBlocks}
+		</if>
+		<if test="degree!=null">
+			AND T.DEGREE=#{degree}
+		</if>
+		<if test="instances!=null">
+			AND T.INSTANCES=#{instances}
+		</if>
+		<if test="cache!=null">
+			AND T.CACHE=#{cache}
+		</if>
+		<if test="tableLock!=null">
+			AND T.TABLE_LOCK=#{tableLock}
+		</if>
+		<if test="sampleSize!=null">
+			AND T.SAMPLE_SIZE=#{sampleSize}
+		</if>
+		<if test="lastAnalyzed!=null">
+			AND T.LAST_ANALYZED=#{lastAnalyzed}
+		</if>
+		<if test="partitioned!=null">
+			AND T.PARTITIONED=#{partitioned}
+		</if>
+		<if test="iotType!=null">
+			AND T.IOT_TYPE=#{iotType}
+		</if>
+		<if test="temporary!=null">
+			AND T.TEMPORARY=#{temporary}
+		</if>
+		<if test="secondary!=null">
+			AND T.SECONDARY=#{secondary}
+		</if>
+		<if test="nested!=null">
+			AND T.NESTED=#{nested}
+		</if>
+		<if test="bufferPool!=null">
+			AND T.BUFFER_POOL=#{bufferPool}
+		</if>
+		<if test="rowMovement!=null">
+			AND T.ROW_MOVEMENT=#{rowMovement}
+		</if>
+		<if test="globalStats!=null">
+			AND T.GLOBAL_STATS=#{globalStats}
+		</if>
+		<if test="userStats!=null">
+			AND T.USER_STATS=#{userStats}
+		</if>
+		<if test="duration!=null">
+			AND T.DURATION=#{duration}
+		</if>
+		<if test="skipCorrupt!=null">
+			AND T.SKIP_CORRUPT=#{skipCorrupt}
+		</if>
+		<if test="monitoring!=null">
+			AND T.MONITORING=#{monitoring}
+		</if>
+		<if test="clusterOwner!=null">
+			AND T.CLUSTER_OWNER=#{clusterOwner}
+		</if>
+		<if test="dependencies!=null">
+			AND T.DEPENDENCIES=#{dependencies}
+		</if>
+		<if test="compression!=null">
+			AND T.COMPRESSION=#{compression}
+		</if>
+		<if test="dropped!=null">
+			AND T.DROPPED=#{dropped}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="userTables" type="com.afocus.pbuilder.oracle.model.UserTables">
+		<result property="tableName" column="TABLE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tablespaceName" column="TABLESPACE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="clusterName" column="CLUSTER_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="iotName" column="IOT_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="STATUS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="pctFree" column="PCT_FREE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="pctUsed" column="PCT_USED" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="iniTrans" column="INI_TRANS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="maxTrans" column="MAX_TRANS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="initialExtent" column="INITIAL_EXTENT" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="nextExtent" column="NEXT_EXTENT" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="minExtents" column="MIN_EXTENTS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="maxExtents" column="MAX_EXTENTS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="pctIncrease" column="PCT_INCREASE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="freelists" column="FREELISTS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="freelistGroups" column="FREELIST_GROUPS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="logging" column="LOGGING" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="backedUp" column="BACKED_UP" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="numRows" column="NUM_ROWS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="blocks" column="BLOCKS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="emptyBlocks" column="EMPTY_BLOCKS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="avgSpace" column="AVG_SPACE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="chainCnt" column="CHAIN_CNT" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="avgRowLen" column="AVG_ROW_LEN" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="avgSpaceFreelistBlocks" column="AVG_SPACE_FREELIST_BLOCKS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="numFreelistBlocks" column="NUM_FREELIST_BLOCKS" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="degree" column="DEGREE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="instances" column="INSTANCES" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="cache" column="CACHE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableLock" column="TABLE_LOCK" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sampleSize" column="SAMPLE_SIZE" javaType="Integer" jdbcType="NUMERIC"></result>
+		<result property="lastAnalyzed" column="LAST_ANALYZED" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="partitioned" column="PARTITIONED" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="iotType" column="IOT_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="temporary" column="TEMPORARY" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="secondary" column="SECONDARY" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="nested" column="NESTED" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="bufferPool" column="BUFFER_POOL" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="rowMovement" column="ROW_MOVEMENT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="globalStats" column="GLOBAL_STATS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userStats" column="USER_STATS" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="duration" column="DURATION" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="skipCorrupt" column="SKIP_CORRUPT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="monitoring" column="MONITORING" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="clusterOwner" column="CLUSTER_OWNER" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dependencies" column="DEPENDENCIES" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="compression" column="COMPRESSION" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dropped" column="DROPPED" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="comments" column="COMMENTS" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM USER_TABLES T
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="userTables">
+		SELECT <include refid="field"/>
+		FROM USER_TABLES T
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = T.TABLE_NAME 
+		  AND TC.TABLE_TYPE = 'TABLE'
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadByName" resultMap="userTables">
+		SELECT <include refid="field"/>
+		FROM USER_TABLES T
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = T.TABLE_NAME 
+		  AND TC.TABLE_TYPE = 'TABLE'
+		WHERE T.TABLE_NAME = #{tableName}
+	</select>
+	
+	<select id="listByNames" resultMap="userTables">
+		SELECT <include refid="field"/>
+		FROM USER_TABLES T
+		LEFT JOIN USER_TAB_COMMENTS TC 
+		   ON TC.TABLE_NAME = T.TABLE_NAME 
+		  AND TC.TABLE_TYPE = 'TABLE'
+		WHERE
+		<foreach collection="tableNameLikes" index="index" item="tableNameLike" open="(" separator="OR" close=")">  
+			T.TABLE_NAME LIKE #{tableNameLike}
+	    </foreach> 
+	</select>
+	
+	<select id="listData" resultType="map">
+		SELECT * FROM ${tableName}
+	</select>
+	
+</mapper>

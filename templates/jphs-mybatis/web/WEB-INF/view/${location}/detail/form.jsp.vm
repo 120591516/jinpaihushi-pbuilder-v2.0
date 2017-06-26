@@ -1,0 +1,23 @@
+<%@page contentType="text/html;charset=utf-8" language="java"%>
+<%@page isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib prefix="jphs" uri="http://www.jinpaihushi.com/jsp/core"%>
+<div style="margin: 10px 0px 10px 0px;" class="event_start_from">
+	<div class="title_defalt">${table.comment}</div>
+	<table id="${bean.alias}Table" class="tableStyle">
+#foreach($field in $bean.filter($baseFields))
+		<tr>
+			<td align="right"#if($velocityCount==1)width="100"#end>${field.comment}：#if(${field.original.isNullable}=="NO")<label style="color: red;">*</label>#end</td>
+			<td>
+#if(${field.type}=="Date")
+				<fmt:formatDate value="${d}{${bean.alias}.${field.name}}" pattern="yyyy-MM-dd HH:mm:ss"/>
+#else
+				<c:out value="${d}{${bean.alias}.${field.name}}"/>
+#end
+			</td>
+		</tr>
+#end
+	</table>
+</div>

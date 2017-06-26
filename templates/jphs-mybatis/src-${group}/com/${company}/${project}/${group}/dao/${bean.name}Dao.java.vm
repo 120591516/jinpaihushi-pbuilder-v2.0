@@ -1,0 +1,19 @@
+package ${base}.dao;
+
+import org.springframework.stereotype.Repository;
+
+import com.jinpaihushi.dao.BaseDao;
+import ${base}.model.${bean.name};
+
+/**
+ * 
+ * @author $!author
+ * @date #date
+ * @version $!version
+ */
+@Repository("${bean.alias}Dao")
+public interface ${bean.name}Dao extends BaseDao<${bean.name}> {
+	
+	
+	
+}

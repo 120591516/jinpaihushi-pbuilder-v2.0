@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="${location}/list" extends="${group}.layout">
+		<put-attribute type="string" name="title" value="${table.comment}管理" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/${location}/list/index.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/${location}/list.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="${location}/edit" extends="${group}.layout">
+		<put-attribute type="string" name="title" value="${table.comment}编辑" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/${location}/edit/index.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/${location}/edit.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="${location}/detail" extends="${group}.layout">
+		<put-attribute type="string" name="title" value="${table.comment}详情" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/${location}/detail/index.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/${location}/detail.js" />
+		</put-list-attribute>
+	</definition>
+	
+</tiles-definitions>

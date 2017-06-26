@@ -1,0 +1,141 @@
+package ${base}.model;
+
+import java.util.function.Predicate;
+
+import javax.validation.constraints.*;
+
+import org.hibernate.validator.constraints.*;
+
+import com.jinpaihushi.function.Updator;
+import com.jinpaihushi.model.BaseModel;
+##嵌入的Javascript
+#javascript($bean.filter($baseFields))
+	var imports = new HashSet();
+	arg0.forEach(function(e){
+		if(!e.fullType.match(/^java\.lang\..*$/)){
+			imports.add(e.fullType);
+		}
+	});
+	context.put("imports", imports);
+#end
+#foreach($ipt in $imports)
+import $ipt;
+#end
+
+/**
+ * ${table.name} $!{table.comment}
+ * 继承自父类的字段:
+#foreach($field in $bean.in($baseFields))
+ * ${field.name} : $!{field.comment}	
+#end
+ * 
+ * @author $!author
+ * @date #date
+ * @company $company
+ * @version $!version
+ */
+@SuppressWarnings("serial")
+public class ${bean.name} extends BaseModel implements Predicate<${bean.name}>,
+		Updator<${bean.name}> {
+
+#foreach($field in $bean.filter($baseFields))
+
+#if(${field.comment})  
+    /** $!{field.comment} */
+#end
+#if(${field.original.isNullable}=="NO")
+#if(${field.type}=='String')
+	@NotEmpty(message = "{${bean.alias}.${field.name}.empty}")
+#else
+	@NotNull(message = "{${bean.alias}.${field.name}.null}")
+#end
+#end
+#if(${field.type}=='String')
+#if(${field.original.characterMaximumLength})
+	@Length(max = ${field.original.characterMaximumLength}, message = "{${bean.alias}.${field.name}.illegal.length}")
+#end
+#end
+	private ${field.type} ${field.name};
+#end
+
+	public ${bean.name}(){}
+
+#if($bean.has("id"))
+	public ${bean.name}(String id){
+		this.id = id;
+	}
+#end
+#foreach($field in $bean.filter($baseFields))
+
+#if(${field.comment})
+	/**
+	 * 获取$!{field.comment}
+	 */
+#end
+	public ${field.type} ${field.getMethod}() {
+    	return ${field.name};
+    }
+  	
+#if(${field.comment})
+	/**
+	 * 设置$!{field.comment}
+	 */
+#end
+	public void ${field.setMethod}(${field.type} ${field.name}) {
+    	this.${field.name} = ${field.name};
+    }
+#end
+
+    public String toString() {
+		return new StringBuilder().append("${bean.name}{").
+#set($i=0)#foreach($field in $bean)
+#if($field.column.type=='CLOB')
+			append("#if(${i}!=0),#end${field.name}=").append("<CLOB:").append(${field.name}==null?0:${field.name}.length()).append(">").
+#else
+			append("#if(${i}!=0),#end${field.name}=").append(${field.name}).
+#end
+#set($i = $i +1)#end
+			append('}').toString();
+    }
+	
+    /**
+	 * 复制字段：
+#foreach($field in $bean)
+#element($table.size(), 4, ", ", "	 * ")${field.name}#end
+#end
+	 */
+	public ${bean.name} copy(){
+		${bean.name} ${bean.alias} = new ${bean.name}();
+#foreach($field in $bean)
+     	${bean.alias}.${field.name} = this.${field.name};
+#end
+		return ${bean.alias};
+	}
+	
+	/**
+	 * 比较字段：
+#foreach($field in $bean)
+#element($table.size(), 4, ", ", "	 * ")${field.name}#end
+#end
+	 */
+	@Override
+	public boolean test(${bean.name} t) {
+		if(t == null) return false;
+		return #foreach($field in $bean)
+#element($bean.size(), $bean.size(), "
+				&& ", "")
+(this.${field.name} == null || this.${field.name}.equals(t.${field.name}))#end#end
+		;
+	}
+	
+	@Override
+	public void update(${bean.name} element) {
+		if (element == null)
+			return;
+#foreach($field in $bean)
+		if (this.${field.name} != null#if(${field.type}=="String") && !this.${field.name}.isEmpty()#end) {
+			element.${field.name} = this.${field.name};
+		}
+#end
+	}
+}

@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	$!author
+	date	:	#date
+	version	:	$!version
+-->
+<mapper namespace="${base}.dao.${bean.name}Dao">
+#set($tableWithoutId = $table.filter("ID"))
+	
+	<sql id="field">
+#foreach($col in $table)
+#element($table.size(), 4, ", ", "		")
+${table.alias}.${col.name}#end
+#end
+	</sql>
+
+	<sql id="fieldGlobal">
+#foreach($col in $table)
+#element($table.size(), 2, ", ", "		")
+${table.alias}.${col.name} ${table.alias}_${col.name}#end
+#end
+	</sql>
+	
+	<sql id="fieldWithAlias">
+#foreach($col in $table)
+#element($table.size(), 2, ", ", "		")
+${table.alias}.${col.name} ${col.alias}#end
+#end
+	</sql>
+	
+	<sql id="condition">
+#foreach($col in $table.filter("CREATE_TIME,UPDATE_TIME,DELETE_TIME"))
+		<if test="${col.alias}!=null#if(${col.jdbcType} == 'VARCHAR') and ${col.alias}!=''#end">
+			AND ${table.alias}.${col.name}=#{${col.alias}}
+		</if>
+#if (${col.name} == "STATUS")
+		<if test="status==null">
+			AND ${table.alias}.STATUS != -1
+	   	</if>
+#end
+#end
+#if($table.has("ID"))
+		<if test="ids!=null and ids!=''">
+			AND ${table.alias}.ID IN (${ids})
+	    </if>
+#end
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+#foreach($col in $table.filter("CREATE_TIME,UPDATE_TIME,DELETE_TIME"))
+#if(${col.jdbcType} == 'VARCHAR')
+			<if test="${col.alias}!=null and ${col.alias}!=''">
+				AND ${table.alias}.${col.name} LIKE CONCAT('%', #{${col.alias}}, '%')
+			</if>
+#else
+			<if test="${col.alias}!=null">
+				AND ${table.alias}.${col.name}=#{${col.alias}}
+			</if>
+#if(${col.name} == "STATUS")
+			<if test="status==null">
+				AND ${table.alias}.STATUS != -1
+		   	</if>
+#end
+#end
+#end
+#if($table.has("ID"))
+			<if test="ids!=null and ids!=''">
+				AND ${table.alias}.ID IN (${ids})
+		    </if>
+#end
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+#foreach($col in $table.filter("ID,CREATE_TIME,DELETE_TIME"))
+           <if test="${col.alias}!=null">
+				${table.alias}.${col.name}=#{${col.alias}}, 
+		   </if>
+#end
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+#if($table.has("ID"))
+		<if test="orderby == null">
+			ORDER BY ${table.alias}.ID DESC
+		</if>
+#end
+	</sql>
+
+	<resultMap id="${bean.alias}" type="${base}.model.${bean.name}">
+#foreach($field in $bean)
+		<result property="${field.name}" column="${field.original.columnName}" javaType="${field.type}" jdbcType="${field.jdbcType}"></result>
+#end
+	</resultMap>
+	
+	<resultMap id="${bean.alias}Global" type="${base}.model.${bean.name}">
+#foreach($field in $bean)
+		<result property="${field.name}" column="${table.alias}_${field.original.columnName}" javaType="${field.type}" jdbcType="${field.jdbcType}"></result>
+#end
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="${base}.model.${bean.name}">
+		INSERT INTO `${table.name}`(
+#foreach($col in $tableWithoutId)
+#element($tableWithoutId.size(), 2, ", ", "			")${col.name}#end
+#end
+		)VALUES(
+#foreach($col in $tableWithoutId)
+#element($tableWithoutId.size(), 2, ", ", "			")#{${col.alias},jdbcType=${col.jdbcType}}#end
+#end
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `${table.name}`(
+#foreach($col in $tableWithoutId)
+#element($tableWithoutId.size(), 2, ", ", "			")${col.name}#end
+#end
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+#foreach($col in $tableWithoutId)
+#element($tableWithoutId.size(), 2, ", ", "			")#{item.${col.alias},jdbcType=${col.jdbcType}}#end
+#end
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE ${table.alias} FROM `${table.name}` ${table.alias} WHERE ${table.alias}.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `${table.name}` ${table.alias}
+		SET 
+		${table.alias}.STATUS = -1#if($table.has("UPDATE_TIME")),
+		${table.alias}.UPDATE_TIME = NOW()#end#if($table.has("DELETE_TIME")),
+		${table.alias}.DELETE_TIME = NOW()#end
+
+		WHERE ${table.alias}.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `${table.name}` ${table.alias}
+		<include refid="dynamicSet" /> 
+	    WHERE ${table.alias}.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="${bean.alias}">
+		SELECT <include refid="field"/>
+		FROM `${table.name}` ${table.alias}
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `${table.name}` ${table.alias}
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="${bean.alias}">
+		SELECT <include refid="field"/>
+		FROM `${table.name}` ${table.alias}
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="${bean.alias}">
+		SELECT <include refid="field"/>
+		FROM `${table.name}` ${table.alias}
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="${bean.alias}">
+		SELECT <include refid="field"/>
+		FROM `${table.name}` ${table.alias}
+		WHERE ${table.alias}.ID = #{id}
+	</select>
+	
+</mapper>

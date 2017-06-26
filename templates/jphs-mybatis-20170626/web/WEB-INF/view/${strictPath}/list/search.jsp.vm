@@ -1,0 +1,28 @@
+﻿<%@page contentType="text/html;charset=utf-8" language="java"%>
+<%@page isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+<form method="get" action="/${path}/index.jhtml">
+<div class="clearfix">
+	<table class="text-right ">
+		<tr>
+#foreach($field in $bean.filter($baseFields))
+			<td>${field.comment}：</td>
+			<td>
+				<input type="text" name="${field.name}" id="${field.name}" value="${d}{${bean.alias}.${field.name}}" />
+			</td>
+#end
+			<td colspan="2">
+				<button type="submit" data-role="search-btn">查询</button>
+			</td>
+		</tr>
+	</table>
+	<div class="marage_search_btn">
+		<button type="submit" class="input-group-addon btn btn-primary search_btn" data-role="search-btn">搜索</button>
+		<button id="clear" class="input-group-addon btn btn-primary search_btn">清空</button>
+	</div>
+</div>
+</form>
+

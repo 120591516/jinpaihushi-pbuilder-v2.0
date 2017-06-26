@@ -1,0 +1,16 @@
+package ${base}.service;
+
+import ${base}.model.${bean.name};
+import com.jinpaihushi.service.BaseService;
+
+/**
+ * 
+ * @author $!author
+ * @date #date
+ * @version $!version
+ */
+public interface ${bean.name}Service extends BaseService<${bean.name}> {
+
+	
+
+}

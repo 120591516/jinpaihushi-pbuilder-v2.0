@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	liuwu
+	date	:	2015-09-07
+	version	:	5.0
+-->
+<mapper namespace="com.afocus.pbuilder.mysql.mapper.ColumnsMapper">
+	
+	<sql id="field">
+		COLUMNS.TABLE_CATALOG, COLUMNS.TABLE_SCHEMA, COLUMNS.TABLE_NAME, COLUMNS.COLUMN_NAME, COLUMNS.ORDINAL_POSITION,
+		COLUMNS.COLUMN_DEFAULT, COLUMNS.IS_NULLABLE, COLUMNS.DATA_TYPE, COLUMNS.CHARACTER_MAXIMUM_LENGTH, COLUMNS.CHARACTER_OCTET_LENGTH,
+		COLUMNS.NUMERIC_PRECISION, COLUMNS.NUMERIC_SCALE, <!-- COLUMNS.DATETIME_PRECISION, --> COLUMNS.CHARACTER_SET_NAME, COLUMNS.COLLATION_NAME,
+		COLUMNS.COLUMN_TYPE, COLUMNS.COLUMN_KEY, COLUMNS.EXTRA, COLUMNS.PRIVILEGES, COLUMNS.COLUMN_COMMENT
+	</sql>
+	
+	<sql id="condition">
+		<if test="tableCatalog!=null">
+			AND COLUMNS.TABLE_CATALOG=#{tableCatalog}
+		</if>
+		<if test="tableSchema!=null">
+			AND COLUMNS.TABLE_SCHEMA=#{tableSchema}
+		</if>
+		<if test="tableName!=null">
+			AND COLUMNS.TABLE_NAME=#{tableName}
+		</if>
+		<if test="columnName!=null">
+			AND COLUMNS.COLUMN_NAME=#{columnName}
+		</if>
+		<if test="ordinalPosition!=null">
+			AND COLUMNS.ORDINAL_POSITION=#{ordinalPosition}
+		</if>
+		<if test="columnDefault!=null">
+			AND COLUMNS.COLUMN_DEFAULT=#{columnDefault}
+		</if>
+		<if test="isNullable!=null">
+			AND COLUMNS.IS_NULLABLE=#{isNullable}
+		</if>
+		<if test="dataType!=null">
+			AND COLUMNS.DATA_TYPE=#{dataType}
+		</if>
+		<if test="characterMaximumLength!=null">
+			AND COLUMNS.CHARACTER_MAXIMUM_LENGTH=#{characterMaximumLength}
+		</if>
+		<if test="characterOctetLength!=null">
+			AND COLUMNS.CHARACTER_OCTET_LENGTH=#{characterOctetLength}
+		</if>
+		<if test="numericPrecision!=null">
+			AND COLUMNS.NUMERIC_PRECISION=#{numericPrecision}
+		</if>
+		<if test="numericScale!=null">
+			AND COLUMNS.NUMERIC_SCALE=#{numericScale}
+		</if>
+		<!-- <if test="datetimePrecision!=null">
+			AND COLUMNS.DATETIME_PRECISION=#{datetimePrecision}
+		</if> -->
+		<if test="characterSetName!=null">
+			AND COLUMNS.CHARACTER_SET_NAME=#{characterSetName}
+		</if>
+		<if test="collationName!=null">
+			AND COLUMNS.COLLATION_NAME=#{collationName}
+		</if>
+		<if test="columnType!=null">
+			AND COLUMNS.COLUMN_TYPE=#{columnType}
+		</if>
+		<if test="columnKey!=null">
+			AND COLUMNS.COLUMN_KEY=#{columnKey}
+		</if>
+		<if test="extra!=null">
+			AND COLUMNS.EXTRA=#{extra}
+		</if>
+		<if test="privileges!=null">
+			AND COLUMNS.PRIVILEGES=#{privileges}
+		</if>
+		<if test="columnComment!=null">
+			AND COLUMNS.COLUMN_COMMENT=#{columnComment}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="orderby">
+		
+	</sql>
+
+	<resultMap id="columns" type="com.afocus.pbuilder.mysql.model.Columns">
+		<result property="tableCatalog" column="TABLE_CATALOG" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableSchema" column="TABLE_SCHEMA" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="tableName" column="TABLE_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnName" column="COLUMN_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="ordinalPosition" column="ORDINAL_POSITION" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="columnDefault" column="COLUMN_DEFAULT" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="isNullable" column="IS_NULLABLE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="dataType" column="DATA_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="characterMaximumLength" column="CHARACTER_MAXIMUM_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="characterOctetLength" column="CHARACTER_OCTET_LENGTH" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="numericPrecision" column="NUMERIC_PRECISION" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="numericScale" column="NUMERIC_SCALE" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="datetimePrecision" column="DATETIME_PRECISION" javaType="Long" jdbcType="BIGINT"></result>
+		<result property="characterSetName" column="CHARACTER_SET_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="collationName" column="COLLATION_NAME" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnType" column="COLUMN_TYPE" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnKey" column="COLUMN_KEY" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="extra" column="EXTRA" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="privileges" column="PRIVILEGES" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="columnComment" column="COLUMN_COMMENT" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS COLUMNS
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="query" resultMap="columns">
+		SELECT <include refid="field"/>
+		FROM COLUMNS INFORMATION_SCHEMA.COLUMNS
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="listTableColumns" resultMap="columns">
+		SELECT <include refid="field"/>
+		FROM INFORMATION_SCHEMA.COLUMNS 
+		WHERE COLUMNS.TABLE_SCHEMA = #{tableSchema} 
+		AND COLUMNS.TABLE_NAME = #{tableName} 
+		ORDER BY COLUMNS.ORDINAL_POSITION ASC
+	</select>
+	
+</mapper>
