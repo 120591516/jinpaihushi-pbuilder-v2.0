@@ -27,18 +27,16 @@
 							<td><c:out value="${d}{e.${field.name}}"/></td>
 #end
 #end						
-							<td>
-								<div class="opertionStn">									
-										<a href="/${path}/edit.jhtml?id=${e.id}" title="编辑">
+							<td>							
+										<a onclick="redirectUpdatePage('${e.id}')">编辑
 											<span class="ui-icon ui-icon-tag"></span>
 										</a>									
-										<a href="/${path}/detail.jhtml?id=${e.id}" title="详情">
+										<a onclick="redirectDetailPage('${e.id}')">详情
 											<span class="ui-icon ui-icon-comment"></span>
 										</a>	
-										<a href="javascript:umodule.remove(${e.id});" title="删除">
+										<a onclick="deleteById('${e.id}')">删除
 											<span class="ui-icon ui-icon-close"></span>
 										</a>
-								</div>
 							</td>
 						</tr>
 					</c:forEach>

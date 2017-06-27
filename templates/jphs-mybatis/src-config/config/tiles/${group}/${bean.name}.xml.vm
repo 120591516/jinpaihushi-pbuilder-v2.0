@@ -3,28 +3,34 @@
 
 <tiles-definitions>
 	
-	<definition name="${location}/list" extends="${group}.layout">
+	<definition name="${location}/list" extends="default.layout">
 		<put-attribute type="string" name="title" value="${table.comment}管理" />
 		<put-attribute type="template" name="body"
 			value="/WEB-INF/view/${location}/list/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/${module}/left.jsp" />
 		<put-list-attribute name="scripts" inherit="true">
 			<add-attribute value="/static/js/${location}/list.js" />
 		</put-list-attribute>
 	</definition>
 	
-	<definition name="${location}/edit" extends="${group}.layout">
+	<definition name="${location}/edit" extends="default.layout">
 		<put-attribute type="string" name="title" value="${table.comment}编辑" />
 		<put-attribute type="template" name="body"
 			value="/WEB-INF/view/${location}/edit/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/${module}/left.jsp" />
 		<put-list-attribute name="scripts" inherit="true">
 			<add-attribute value="/static/js/${location}/edit.js" />
 		</put-list-attribute>
 	</definition>
 	
-	<definition name="${location}/detail" extends="${group}.layout">
+	<definition name="${location}/detail" extends="default.layout">
 		<put-attribute type="string" name="title" value="${table.comment}详情" />
 		<put-attribute type="template" name="body"
 			value="/WEB-INF/view/${location}/detail/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/${module}/left.jsp" />
 		<put-list-attribute name="scripts" inherit="true">
 			<add-attribute value="/static/js/${location}/detail.js" />
 		</put-list-attribute>

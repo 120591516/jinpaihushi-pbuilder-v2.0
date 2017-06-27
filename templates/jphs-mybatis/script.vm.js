@@ -86,9 +86,11 @@ var HashSet = Java.type("java.util.HashSet");
 		if(parts[0] != context.get("group")){
 			path = context.get("group") + "/" + path;
 		}
+		var module = context.get("module");
 		var location = context.get("module")+"/" + path;
 		context.put("path", path);
 		context.put("strictPath", strictPath);
+		context.put("module", module);
 		context.put("location", location);
 	});
 
